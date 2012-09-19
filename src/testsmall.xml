@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<JamendoData epoch="1227647795" documentation="http://developer.jamendo.com/en/wiki/DatabaseDumps" type="artistalbumtrack">
+    <Artists>
+        <artist>
+            <id>22</id>                                          <!-- internal jamendo ID -->
+            <name>Lonah</name>                                   <!-- display name -->
+            <url>http://www.jamendo.com/en/artist/lonah</url>    <!-- jamendo url to artist -->
+            <mbgid>79239441-bfd5-4981-a70c-55c3f15c1287</mbgid>  <!-- musicbrainz ID (may be blank) -->
+            <image>http://imgjam.com/artists/l/lonah.jpg</image> <!-- artist image url -->
+
+        </artist>
+    </Artists>
+
+</JamendoData>
