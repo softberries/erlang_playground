@@ -24,6 +24,23 @@
                     <license_artwork>http://creativecommons.org/licenses/by-sa/3.0</license_artwork>
                     <releasedate>2008-02-25T15:37:58+01:00</releasedate>            <!-- ISO-formatted date -->
                     <filename>Lonah - En chantant</filename>         <!-- Usual directory name without extension -->
+                    <Tracks>
+                    <track>
+                        <id>234233</id>
+                        <name>En chantant!</name>
+                        <filename>01 - Lonah - En chantant</filename> <!-- Usual filename without extension -->
+                        <mbgid></mbgid>                               <!-- musicbrainz ID (may be blank) -->
+                        <numalbum>1</numalbum>                        <!-- Track number in the album. starts at 1 -->
+                        <id3genre>13</id3genre>                       <!-- Standard ID3 genre, 0 to 79 (cf below in Misc.) -->
+                        <license>http://creativecommons.org/licenses/by-sa/3.0/</license>
+                        <Tags>
+                            <tag>
+                                <idstr>rock</idstr>
+                                <weight>0.46</weight>                <!-- weight always between 0 and 1 -->
+                            </tag>
+                        </Tags>
+                    </track>
+                    </Tracks>
                 </album>
                 <album>
                     <id>116</id>                                     <!-- internal jamendo ID -->
@@ -34,16 +51,23 @@
                     <license_artwork>http://creativecommons.org/licenses/by-sa/3.0</license_artwork>
                     <releasedate>2008-02-25T15:37:58+01:00</releasedate>            <!-- ISO-formatted date -->
                     <filename>Lonah - En chantant</filename>         <!-- Usual directory name without extension -->
-                </album>
-                <album>
-                    <id>116</id>                                     <!-- internal jamendo ID -->
-                    <name>Pieces</name>                              <!-- display name -->
-                    <url>http://www.jamendo.com/album/116</url>    <!-- jamendo url to album -->
-                    <id3genre>43</id3genre>
-                    <mbgid></mbgid>                                  <!-- musicbrainz ID (may be blank) -->
-                    <license_artwork>http://creativecommons.org/licenses/by-sa/3.0</license_artwork>
-                    <releasedate>2008-02-25T15:37:58+01:00</releasedate>            <!-- ISO-formatted date -->
-                    <filename>Lonah - En chantant</filename>         <!-- Usual directory name without extension -->
+                    <Tracks>
+                        <track>
+                            <id>234233</id>
+                            <name>En chantant!</name>
+                            <filename>01 - Lonah - En chantant</filename> <!-- Usual filename without extension -->
+                            <mbgid></mbgid>                               <!-- musicbrainz ID (may be blank) -->
+                            <numalbum>1</numalbum>                        <!-- Track number in the album. starts at 1 -->
+                            <id3genre>13</id3genre>                       <!-- Standard ID3 genre, 0 to 79 (cf below in Misc.) -->
+                            <license>http://creativecommons.org/licenses/by-sa/3.0/</license>
+                            <Tags>
+                                <tag>
+                                    <idstr>rock</idstr>
+                                    <weight>0.46</weight>                <!-- weight always between 0 and 1 -->
+                                </tag>
+                            </Tags>
+                        </track>
+                    </Tracks>
                 </album>
             </Albums>
         </artist>
