@@ -26,16 +26,16 @@ run(File, Result) ->
 callback(Event, Acc) -> processTag(Event,Acc).
 
 isValidTag(T) -> lists:member(T,
-    ["artist","id","name","image","url","mbgid","country","state","city","location","latitude","longitude","album","Albums"]
+    ["artist","id","name","image","url","mbgid","country","state","city","location","latitude","longitude","album","Albums","id3genre","licence_artwork","releasedate","filename"]
 ).
 
 processTag({startElement,[],"location",[],[]},Acc) -> [Path,N,Artist] = Acc,
-  processStartTag("location",[Path,N,Artist++[{<<"location">>,[]}]]);
+  processStartTag("location",[Path,N+1,Artist++[{<<"location">>,[]}]]);
 processTag({startElement,[],"Albums",[],[]},Acc) -> [Path,N,Artist] = Acc,
   processStartTag("Albums",[Path,N,Artist++[{<<"Albums">>,[]}]]);
 processTag({startElement,[],"album",[],[]},Acc) -> [Path,N,Artist] = Acc,
-  {Key,Albums} = getByKey(Artist,<<"Albums">>),
-  processStartTag("album",[Path,N+1,lists:keyreplace(Key,1,Artist,{Key,Albums++[<<"album">>,[]]})]);
+  {Key,Albums} = getByKey(Artist,<<"Albums">>,1),
+  processStartTag("album",[Path,N+1,lists:keyreplace(Key,1,Artist,{Key,Albums++[{<<"album">>,[]}]})]);
 
 processTag({startElement,[],T,[],[]},Acc) ->
   case isValidTag(T) of
@@ -50,28 +50,30 @@ processTag({endElement,[],T,[]},Acc) ->
   end;
 
 processTag({characters,Data},Acc) -> [Path,N,Artist] = Acc,
-%  io:format("Path: ~p, Data: ~p~n",[Path,Data]),
+  io:format("~p, Path: ~p, Data: ~p~n",[N,Path,Data]),
   case Path of
     %Artist
                {["artist"],[]} -> Acc;
-               {["id"],["artist"]} -> [Path,N,Artist++[{<<"id">>,Data}]];
-               {["name"],["artist"]} -> [Path,N,Artist++[{<<"name">>,Data}]];
-               {["url"],["artist"]} -> [Path,N,Artist++[{<<"url">>,Data}]];
-               {["image"],["artist"]} -> [Path,N,Artist++[{<<"image">>,Data}]];
-               {["mbgid"],["artist"]} -> [Path,N,Artist++[{<<"mbgid">>,Data}]];
+               {["id"],["artist"]} -> setArtistProperty(Path,Artist,Data,N,<<"id">>);
+               {["name"],["artist"]} -> setArtistProperty(Path,Artist,Data,N,<<"name">>);
+               {["url"],["artist"]} -> setArtistProperty(Path,Artist,Data,N,<<"url">>);
+               {["image"],["artist"]} -> setArtistProperty(Path,Artist,Data,N,<<"image">>);
+               {["mbgid"],["artist"]} -> setArtistProperty(Path,Artist,Data,N,<<"mbgid">>);
     %Location
-               {["city","location"],["artist"]} -> T = {<<"city">>,Data}, {Key,Loc} = getByKey(Artist,<<"location">>),
-                 [Path,N,lists:keyreplace(Key,1,Artist,{Key,Loc++[T]})];
-               {["state","location"],["artist"]} -> T = {<<"state">>,Data}, {Key,Loc} = getByKey(Artist,<<"location">>),
-                 [Path,N,lists:keyreplace(Key,1,Artist,{Key,Loc++[T]})];
-               {["country","location"],["artist"]} -> T = {<<"country">>,Data}, {Key,Loc} = getByKey(Artist,<<"location">>),
-                 [Path,N,lists:keyreplace(Key,1,Artist,{Key,Loc++[T]})];
-               {["latitude","location"],["artist"]} -> T = {<<"latitude">>,Data}, {Key,Loc} = getByKey(Artist,<<"location">>),
-                 [Path,N,lists:keyreplace(Key,1,Artist,{Key,Loc++[T]})];
-               {["longitude","location"],["artist"]} -> T = {<<"langitude">>,Data}, {Key,Loc} = getByKey(Artist,<<"location">>),
-                 [Path,N,lists:keyreplace(Key,1,Artist,{Key,Loc++[T]})];
+               {["city","location"],["artist"]} -> setLocationProperty(Path,Artist,Data,N,<<"city">>);
+               {["state","location"],["artist"]} -> setLocationProperty(Path,Artist,Data,N,<<"state">>);
+               {["country","location"],["artist"]} -> setLocationProperty(Path,Artist,Data,N,<<"country">>);
+               {["latitude","location"],["artist"]} -> setLocationProperty(Path,Artist,Data,N,<<"latitude">>);
+               {["longitude","location"],["artist"]} -> setLocationProperty(Path,Artist,Data,N,<<"longitude">>);
    %Albums
-%               {["id","album","Albums"],["artist"]} -> Acc;
+               {["id","album","Albums"],["artist"]} -> setAlbumProperty(Path,Artist,Data,N,<<"id">>);
+               {["name","album","Albums"],["artist"]} -> setAlbumProperty(Path,Artist,Data,N,<<"name">>);
+               {["url","album","Albums"],["artist"]} -> setAlbumProperty(Path,Artist,Data,N,<<"url">>);
+               {["id3genre","album","Albums"],["artist"]} -> setAlbumProperty(Path,Artist,Data,N,<<"id3genre">>);
+               {["mbgid","album","Albums"],["artist"]} -> setAlbumProperty(Path,Artist,Data,N,<<"mbgid">>);
+               {["license_artwork","album","Albums"],["artist"]} -> setAlbumProperty(Path,Artist,Data,N,<<"license_artwork">>);
+               {["releasedate","album","Albums"],["artist"]} -> setAlbumProperty(Path,Artist,Data,N,<<"releasedate">>);
+               {["filename","album","Albums"],["artist"]} -> setAlbumProperty(Path,Artist,Data,N,<<"filename">>);
     _Else    -> Acc
   end;
 
@@ -83,11 +85,30 @@ processStartTag(T,Acc) -> [Path,N,Artist] = Acc, [queue:in(T,Path),N,Artist].
 
 
 processEndTag("artist",Acc) -> io:format("~p~n",[Acc]), [];
-processEndTag("Albums",Acc) -> [Path,_,Artist] = Acc, {_,Queue} = queue:out_r(Path), [Queue, 0, Artist];
+processEndTag("Albums",Acc) -> [Path,_,Artist] = Acc, {_,Queue} = queue:out_r(Path), [ Queue, 0, Artist];
+processEndTag("location",Acc) -> [Path,_,Artist] = Acc, {_,Queue} = queue:out_r(Path), [Queue, 0, Artist];
 processEndTag(_,Acc) -> [Path,N,Artist] = Acc, {_,Queue} = queue:out_r(Path), [Queue, N, Artist].
 
+setAlbumProperty(Path,Artist,Data,N,Property) -> T = {Property,Data},
+  {_,Albums} = getByKey(Artist,<<"Albums">>,1),
+  {_,Album} = lists:nth(N,Albums),
+  Replaced = replaceElement(Albums,N,{<<"album">>,Album++[T]}),
+  NewArtist = lists:keyreplace(<<"Albums">>,1,Artist,{<<"Albums">>,Replaced}),
+  [Path,N,NewArtist].
 
-getByKey(Artist,Key) -> lists:keyfind(Key, 1, Artist).
+setLocationProperty(Path,Artist,Data,N,Property) -> T = {Property,Data}, {Key,Loc} = getByKey(Artist,<<"location">>,N),
+  [Path,N,lists:keyreplace(Key,1,Artist,{Key,Loc++[T]})].
+
+setArtistProperty(Path,Artist,Data,N,Property) -> [Path,N,Artist++[{Property,Data}]].
+
+replaceElement(List,N,Element) ->
+%  io:format("List: ~p, N: ~p, Element: ~p~n",[List,N,Element]),
+  case N of
+    1 -> []++[Element];
+    _Else -> lists:sublist(List,N-1) ++ [Element]
+  end.
+
+getByKey(Artist,Key,Pos) ->  lists:keyfind(Key, Pos, Artist).
 
 
 %% this is just to make it easier to test this little example
