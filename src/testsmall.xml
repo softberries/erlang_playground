@@ -33,6 +33,16 @@
                         <numalbum>1</numalbum>                        <!-- Track number in the album. starts at 1 -->
                         <id3genre>13</id3genre>                       <!-- Standard ID3 genre, 0 to 79 (cf below in Misc.) -->
                         <license>http://creativecommons.org/licenses/by-sa/3.0/</license>
+                        <Tags>
+                            <tag>
+                                <idstr>rock</idstr>
+                                <weight>0.46</weight>
+                            </tag>
+                            <tag>
+                                <idstr>rock2</idstr>
+                                <weight>0.9</weight>
+                            </tag>
+                        </Tags>
                     </track>
                         <track>
                             <id>2</id>
@@ -42,6 +52,16 @@
                             <numalbum>1</numalbum>                        <!-- Track number in the album. starts at 1 -->
                             <id3genre>13</id3genre>                       <!-- Standard ID3 genre, 0 to 79 (cf below in Misc.) -->
                             <license>http://creativecommons.org/licenses/by-sa/3.0/</license>
+                            <Tags>
+                                <tag>
+                                    <idstr>rock</idstr>
+                                    <weight>0.46</weight>
+                                </tag>
+                                <tag>
+                                    <idstr>rock2</idstr>
+                                    <weight>0.9</weight>
+                                </tag>
+                            </Tags>
                         </track>
                     </Tracks>
                 </album>
@@ -63,7 +83,12 @@
                             <numalbum>1</numalbum>                        <!-- Track number in the album. starts at 1 -->
                             <id3genre>13</id3genre>                       <!-- Standard ID3 genre, 0 to 79 (cf below in Misc.) -->
                             <license>http://creativecommons.org/licenses/by-sa/3.0/</license>
-
+                            <Tags>
+                            <tag>
+                                <idstr>rock</idstr>
+                                <weight>0.66</weight>
+                            </tag>
+                            </Tags>
                         </track>
                     </Tracks>
                 </album>
